@@ -123,6 +123,8 @@ def add_conditions(df):
     tmp_arr_fatigue = np.zeros(df.shape[0])
     tmp_arr_diarrhea = np.zeros(df.shape[0])
     tmp_arr_headache = np.zeros(df.shape[0])
+    tmp_arr_backache = np.zeros(df.shape[0])
+    tmp_arr_smell_taste = np.zeros(df.shape[0])
 
     for person_id in person_id_arr:
         person_conditions_df = condition_table[condition_table.person_id == person_id]
@@ -176,6 +178,14 @@ def add_conditions(df):
             tmp_arr_headache[index] = 1
         else:
             tmp_arr_headache[index] = 0
+        if (134736 in unique_person_condition_list):
+            tmp_arr_backache[index] = 1
+        else: 
+            tmp_arr_backache[index] = 0
+        if (43530714 in unique_person_condition_list or 436235 in unique_person_condition_list or 4185711 in unique_person_condition_list):
+            tmp_arr_smell_taste[index] = 1
+        else:
+            tmp_arr_smell_taste[index] = 0
 
     df["fever"] = tmp_arr_fever
     df["cough"] = tmp_arr_cough
@@ -186,7 +196,9 @@ def add_conditions(df):
     df["fatigue"] = tmp_arr_fatigue
     df["diarrhea"] = tmp_arr_diarrhea
     df["headache"] = tmp_arr_headache
-
+    df['backache'] = tmp_arr_backache
+    df['smell_taste'] = tmp_arr_smell_taste
+    
     return df
 
 
