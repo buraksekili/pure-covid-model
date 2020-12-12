@@ -287,11 +287,11 @@ xg_classifier = xgb.XGBClassifier(
 )
 
 params = {
-    "max_depth": [3, 4, 5],
-    "learning_rate": [0.1, 0.01, 0.5],
+    "max_depth": [2, 3, 3.5],
+    "learning_rate": [0.1, 0.01, 0.25],
     "gamma": [0, 0.25, 1],
-    "reg_lambda": [0, 1, 10],
-    "scale_pos_weight": [1, 3, 5],
+    "reg_lambda": [0, 0.5, 1],
+    "scale_pos_weight": [0.5, 1, 2],
 }
 
 optimal_params = GridSearchCV(
