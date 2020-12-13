@@ -25,7 +25,10 @@ https://www.synapse.org/#!Synapse:syn21849255/wiki/602419
 
 
 ## Results
-**XGBoost with default parameter:** *0.6687*
 
-**XGBoost with `'scale_pos_weight': 1, 'max_depth': 3, 'reg_lambda': 0, 'gamma': 0, 'learning_rate': 0.1` as the optimal parameter:** *0.6927*
 
+| AUC  | scale_pos_weight| max_dept | reg_lambda | gamma | learning_rate|
+|----------- | ----------- | -----------  | ----------- | ----------- | -----------| 
+| 0.6687 | default | default | default | default | default |
+| 0.6927   | 1 |  3 |  0 | 0 | 0.1 |
+| 0.6989   | 0.5 |  2 |  0 | 0 | 0.1 |
