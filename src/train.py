@@ -6,6 +6,9 @@ from datetime import datetime, timedelta
 from sklearn.model_selection import GridSearchCV
 
 
+print("Training is started", flush=True)
+
+
 def add_from_person_table(concept_id, column_name, new_column_name, df):
     sub_table = df[df[column_name] == concept_id]
     tmp_arr = np.zeros(df.shape[0])
@@ -281,28 +284,35 @@ y = gs.status.values
 
 negative_ratio = len(y[y == 0]) / len(y)
 positive_ratio = len(y[y == 1]) / len(y)
+tmp_scale = negative_ratio // positive_ratio
 
+# subsample: Use randomly selected 90% of the data
+# colsample_bytree: Use 50% of the columns per tree.
 xg_classifier = xgb.XGBClassifier(
-    objective="binary:logistic", subsample=0.9, colsample_bytree=0.5
+    objective="binary:logistic", seed=42, subsample=0.9, colsample_bytree=0.5
 )
 
+# max_depth: how deep the tree can go
+# learning_rate: 'eta' in xgboost
+# gamma: purining, regularization parameter
+# scale_pos_weight: balance the pos. and neg. weights
 params = {
-    "max_depth": [2, 3, 3.5],
+    "max_depth": [2, 3, 4],
     "learning_rate": [0.1, 0.01, 0.25],
     "gamma": [0, 0.25, 1],
     "reg_lambda": [0, 0.5, 1],
-    "scale_pos_weight": [0.5, 1, 2],
+    "scale_pos_weight": [0.5, 1, 2, tmp_scale],
 }
 
 optimal_params = GridSearchCV(
     estimator=xg_classifier, param_grid=params, n_jobs=10, cv=3
 )
 
-best_model = optimal_params.fit(X, y)
+best_model = optimal_params.fit(X, y, verbose=False)
 
 dump(best_model, "/model/v6.joblib")
 print("Training stage finished", flush=True)
-print("Optimal paramters: ", optimal_params.best_params_)
+print("Optimal paramters: ", optimal_params.best_params_, flush=True)
 
 df = df.sort_index()
 df = df.truncate(before=-1, after=-1)
